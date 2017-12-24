@@ -2,7 +2,7 @@
 
 // 引入相关的样式
 require("../less/index.less");
-
+import $ from "jquery";
 console.log("index content");
  //const arr = ["reng","jia","ming"];
  var loginTpl = require("../handlebars/login.handlebars");
