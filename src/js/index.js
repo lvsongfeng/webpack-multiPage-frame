@@ -4,15 +4,15 @@
 require("../less/index.less");
 
 console.log("index content");
+ //const arr = ["reng","jia","ming"];
 
-// const arr = ["reng","jia","ming"];
-
-var loginTpl = require("../handlebars/login.handlebars");
-
+ var loginTpl = require("../handlebars/login.handlebars");
+// let aa = "this is es6";
+//console.log(aa)
 $("#login").click(function(){
     var div = document.createElement("div");
     div.innerHTML = loginTpl({
-        name:"reng jia handlebars"
+        name:"login dialog handlebars"
     });
     $("body").prepend(div);
 });
