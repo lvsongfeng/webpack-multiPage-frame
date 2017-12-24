@@ -70,7 +70,7 @@ module.exports = {
                         presets: ["es2015"]
                     }
                 },
-                include: path.join(__dirname, 'src'),//包含的路径（匹配特定条件）
+                include: path.join(__dirname, 'src/js'),//包含的路径（匹配特定条件）
             },
             {
                 test: /\.css$/,
