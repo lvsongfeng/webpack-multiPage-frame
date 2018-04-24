@@ -1,50 +1,62 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const glob = require('glob');
 let configPlugin = [];  //plugin 设置数组
 configPlugin = [
     new ExtractTextPlugin({//从bundle中提取出
         filename: (getPath) => {
-            return getPath('css/[name].[chunkhash].min.css').replace('css/js', 'css');//.js文件中的.css|.less|.sass内容转换成转换成.css文件。
+            return getPath('css/[name].[chunkhash:5].min.css').replace('css/js', 'css');//.js文件中的.css|.less|.sass内容转换成转换成.css文件。
         },
         disable: false,//禁用插件为false
         // allChunks:true
     }),
+    new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        _: 'lodash'
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        minChunks: Infinity
+    })
 ]
 function resolve(dir) {//因为自己改变了文件的路径，这里需要重新处理一下
     return path.join(__dirname, '..', dir);
 }
 // 页面入口处理方法,遍历 js 文件夹面的js文件, 顺便插入模板文件 htmlWebpackPlugin
 function pageEnteries() {
-    var enter = {};
-    var filePath = path.join(__dirname, '..', 'src/js');
-    var options = {
+    let enter = {};
+    let filePath = path.join(__dirname, '..', 'src/js');
+    let options = {
         cwd: filePath, // 在src/js目录里找
         sync: true, // 这里不能异步，只能同步
     }
-    var filePathAry = new glob.Glob('*.js', options); // ["about.js","contact.js","index.js"]
+    let filePathAry = new glob.Glob('*.js', options); // ["about.js","contact.js","index.js"]
     filePathAry = filePathAry.found;
     filePathAry.forEach(element => {
         // 设置enter js 文件
-        var key = element.split('.')[0]
+        let key = element.split('.')[0]
         enter[key] = path.resolve('./src/js/', element)
         // 设置 生成html 模板文件
         configPlugin.push(new HtmlWebpackPlugin({
             filename: resolve(`/dist/${key}.html`),//处理dirname路径的问题 ，这里等同于'../dist/index.html', 
             template: `./src/template/${key}.html`,
-            chunks: ['common', key]
+             chunks: ['vendor',key]
         }))
     });
     return enter
 }
 
 module.exports = {
-    entry: pageEnteries(),
+    entry: Object.assign(pageEnteries(),{
+        'vendor': ['jquery', 'lodash']
+    }),
     output: {//指示webpack如何去输出，以及在哪里输出你的「bundle、asset和其他你所打包或使用webpack载入的任何内容」。
         path: path.join(__dirname, '../dist/'),//目录对应一个绝对路径
-        //pathinfo:true,//告诉 webpack 在 bundle 中引入「所包含模块信息」的相关注释。默认是false，pathinfo是在开发环境中使用，在生产环境中就不推荐
-        filename: 'js/[name].[chunkhash].min.js',//filename选项决定了在每个输出bundle的名称。这些bundle将写入到「output.path」选项指定的目录下。
+        filename: 'js/[name].min.js',//filename选项决定了在每个输出bundle的名称。这些bundle将写入到「output.path」选项指定的目录下。
         //publicPath:'/',//值是string类型，对于加载（on-demand-load）或加载外部资源(external resources)（如图片、文件等）来说
         //output.publicPath是很重要的选项。如果指定了一个错误的值，则在加载这些资源的时候会收到404错误
     },
@@ -119,4 +131,5 @@ module.exports = {
         fs: "empty"
     },
     plugins: configPlugin,
+    //devtool: 'eval'
 }

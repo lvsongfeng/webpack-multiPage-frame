@@ -31,11 +31,11 @@ module.exports = {
         // ],
         "quotes": [//字符串的引用使用双引号
             "warn",
-            "double"
+            "single"
         ],
         "semi": [//检查分号semicolons
             "warn",
-            "always"
+            "never"
         ],
         "no-console":"off"//不检查console.log的语法，忽略它
     },

@@ -1,16 +1,17 @@
-//index页面引用
-
-// 引入相关的样式
-require("../less/index.less");
-import $ from "jquery";
-console.log("index content");
- //const arr = ["reng","jia","ming"];
- var loginTpl = require("../handlebars/login.handlebars");
-$("#login").click(function(){
-    var div = document.createElement("div");
+import { commonText } from '../utils/index'
+import '../less/common/common.less'
+_.forEach([1,2,3,4], (item) => {
+    console.log('index.js' + item)
+})
+console.log(commonText)
+require('../less/index.less')
+console.log($('#login').html())
+ var loginTpl = require('../handlebars/login.handlebars')
+$('#login').click(function(){
+    var div = document.createElement('div')
     div.innerHTML = loginTpl({
-        name:"login dialog handlebars"
-    });
-    $("body").prepend(div);
-});
+        name:'login dialog handlebars !!~~!!'
+    })
+    $('body').prepend(div)
+})
 

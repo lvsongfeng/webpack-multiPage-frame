@@ -4,7 +4,6 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require("webpack-merge");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = merge(baseWebpackConfig,{
     plugins:[//插件，具体的内容可以查看链接 -- https://doc.webpack-china.org/plugins/
@@ -13,9 +12,6 @@ module.exports = merge(baseWebpackConfig,{
                 safe:true
             }
         }),
-        new UglifyJSPlugin({   //压缩js代码--链接 https://doc.webpack-china.org/plugins/uglifyjs-webpack-plugin/
-
-        }),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(['dist'])
     ],
 })
