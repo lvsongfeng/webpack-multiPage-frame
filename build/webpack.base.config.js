@@ -20,8 +20,11 @@ configPlugin = [
     }),
     new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor',
-        minChunks: Infinity
-    })
+        minChunks: function (module) {
+            return module.context && module.context.indexOf("node_modules") !== -1
+        }
+    }),
+    new webpack.NamedModulesPlugin()
 ]
 function resolve(dir) {//因为自己改变了文件的路径，这里需要重新处理一下
     return path.join(__dirname, '..', dir);
@@ -44,7 +47,7 @@ function pageEnteries() {
         configPlugin.push(new HtmlWebpackPlugin({
             filename: resolve(`/dist/${key}.html`),//处理dirname路径的问题 ，这里等同于'../dist/index.html', 
             template: `./src/template/${key}.html`,
-             chunks: ['vendor',key]
+             chunks: ['vendor','mainfest',key]
         }))
     });
     return enter

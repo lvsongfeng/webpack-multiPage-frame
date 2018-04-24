@@ -10,7 +10,7 @@ console.log($('#login').html())
 $('#login').click(function(){
     var div = document.createElement('div')
     div.innerHTML = loginTpl({
-        name:'login dialog handlebars !!~~!!'
+        name:'login dialog handlebars haha!!'
     })
     $('body').prepend(div)
 })
